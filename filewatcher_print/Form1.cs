@@ -10,6 +10,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Drawing.Printing;
 
 namespace filewatcher_print
 {
@@ -36,7 +37,7 @@ namespace filewatcher_print
             
             //監視するフォルダを指定
             watcher.Path = @"C:\Users\1223138\Desktop\filewatch"; //ここ変える
-            //カレントディレクトリを↑と同じにする
+            //カレントディレクトリを↑と同じにする↓
             System.IO.Directory.SetCurrentDirectory(@"C:\Users\1223138\Desktop\filewatch"); //ここも変える
 
             //最終アクセス、最終更新、ファイル、フォルダ名の変更を監視
@@ -105,6 +106,22 @@ namespace filewatcher_print
         //印刷イベントハンドラ
         private void pd_Print()
         {
+            　using (PrintDocument doc = new PrintDocument())
+             {
+                // 用紙の向きを設定(横：true、縦：false)
+                doc.DefaultPageSettings.Landscape = true;
+
+                // プリンタがサポートしている用紙サイズを調べる
+                foreach (PaperSize ps in doc.PrinterSettings.PaperSizes)
+                 {
+                     // A4用紙に設定
+                    if (ps.Kind == PaperKind.A4)
+                     {
+                         doc.DefaultPageSettings.PaperSize = ps;
+                         break;
+                     }
+                 }
+
             //PrintDocumentオブジェクトの作成
             System.Drawing.Printing.PrintDocument pd =
                 new System.Drawing.Printing.PrintDocument();
