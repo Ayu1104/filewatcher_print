@@ -106,30 +106,47 @@ namespace filewatcher_print
         //印刷イベントハンドラ
         private void pd_Print()
         {
-            　using (PrintDocument doc = new PrintDocument())
-             {
-                // 用紙の向きを設定(横：true、縦：false)
-                doc.DefaultPageSettings.Landscape = true;
+            using (PrintDocument doc = new PrintDocument())
+            {
+                /*
+                               doc.DefaultPageSettings.Landscape = true;
 
                 // プリンタがサポートしている用紙サイズを調べる
                 foreach (PaperSize ps in doc.PrinterSettings.PaperSizes)
-                 {
-                     // A4用紙に設定
+                {
+                    // A4用紙に設定
                     if (ps.Kind == PaperKind.A4)
-                     {
-                         doc.DefaultPageSettings.PaperSize = ps;
-                         break;
-                     }
-                 }
+                    {
+                        doc.DefaultPageSettings.PaperSize = ps;
+                        break;
+                    }
+                }
+                */
 
-            //PrintDocumentオブジェクトの作成
-            System.Drawing.Printing.PrintDocument pd =
-                new System.Drawing.Printing.PrintDocument();
-            //PrintPageイベントハンドラの追加
-            pd.PrintPage +=
-                new System.Drawing.Printing.PrintPageEventHandler(pd_PrintPage);
-            //印刷を開始する
-            pd.Print();
+                //PrintDocumentオブジェクトの作成
+                System.Drawing.Printing.PrintDocument pd =
+                    new System.Drawing.Printing.PrintDocument();
+                //PrintPageイベントハンドラの追加
+                pd.PrintPage +=
+                    new System.Drawing.Printing.PrintPageEventHandler(pd_PrintPage);
+
+                // 用紙の向きを設定(横：true、縦：false)
+                pd.DefaultPageSettings.Landscape = true;
+
+                // プリンタがサポートしている用紙サイズを調べる
+                foreach (PaperSize ps in pd.PrinterSettings.PaperSizes)
+                {
+                    // A4用紙に設定
+                    if (ps.Kind == PaperKind.A4)
+                    {
+                        doc.DefaultPageSettings.PaperSize = ps;
+                        break;
+                    }
+                }
+
+                //印刷を開始する
+                pd.Print();
+            }
         }
 
         private void pd_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e)
