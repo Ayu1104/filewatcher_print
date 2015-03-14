@@ -156,7 +156,8 @@ namespace filewatcher_print
             //画像を読み込む
             Image img = Image.FromFile(filename);
             //画像を描画
-            e.Graphics.DrawImage(img, e.MarginBounds);
+            //e.Graphics.DrawImage(img, e.MarginBounds);
+            e.Graphics.DrawImage(img,580,0,img.Width*0.8f,img.Height*0.8f);
             //次のページがないことを通知する(必要)
             e.HasMorePages = false;
             //後始末をする
