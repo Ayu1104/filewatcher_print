@@ -1,0 +1,7 @@
+c:\users\1223138\documents\visual studio 2010\Projects\filewatcher_print\filewatcher_print\obj\x86\Debug\filewatcher_print.Form1.resources
+c:\users\1223138\documents\visual studio 2010\Projects\filewatcher_print\filewatcher_print\obj\x86\Debug\filewatcher_print.Properties.Resources.resources
+c:\users\1223138\documents\visual studio 2010\Projects\filewatcher_print\filewatcher_print\obj\x86\Debug\filewatcher_print.csproj.GenerateResource.Cache
+c:\users\1223138\documents\visual studio 2010\Projects\filewatcher_print\filewatcher_print\bin\Debug\filewatcher_print.exe
+c:\users\1223138\documents\visual studio 2010\Projects\filewatcher_print\filewatcher_print\bin\Debug\filewatcher_print.pdb
+c:\users\1223138\documents\visual studio 2010\Projects\filewatcher_print\filewatcher_print\obj\x86\Debug\filewatcher_print.exe
+c:\users\1223138\documents\visual studio 2010\Projects\filewatcher_print\filewatcher_print\obj\x86\Debug\filewatcher_print.pdb
