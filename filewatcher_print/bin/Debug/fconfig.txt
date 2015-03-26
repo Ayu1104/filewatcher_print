@@ -1,0 +1,11 @@
+C:\Users\1223138\Desktop\filewatch
+580,0,0.8,0.8
+
+一行目に監視したいフォルダのパス
+二行目に印刷設定を記入
+x座標,y座標,横,縦
+
+e.Graphics.DrawImage(img,580,0,img.Width*0.8f,img.Height*0.8f);
+DrawImage(Image, Int32, Int32, Int32, Int32)
+
+用紙サイズはA4固定です 
