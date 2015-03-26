@@ -29,7 +29,7 @@ namespace filewatcher_print
 
         private FileSystemWatcher watcher = null;
         string filepath;
-        string filename = string.Empty;
+        string foldername = string.Empty;
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -47,7 +47,7 @@ namespace filewatcher_print
                 //ファイルを1行ずつ読み込む
                 string stBuffer = cReader.ReadLine();
                 //読み込んだものを追加で格納する
-                filename += stBuffer;
+                foldername += stBuffer;
             }
 
             //cReaderとじる→オブジェクトの破棄を保証する
@@ -58,8 +58,8 @@ namespace filewatcher_print
             //カレントディレクトリを↑と同じにする↓
             //Directory.SetCurrentDirectory(@"C:\Users\1223138\Desktop\filewatch"); //ここも変える
 
-            watcher.Path = @filename;
-            Directory.SetCurrentDirectory(@filename);
+            watcher.Path = @foldername;
+            Directory.SetCurrentDirectory(@foldername);
 
             //最終アクセス、最終更新、ファイル、フォルダ名の変更を監視
             watcher.NotifyFilter =
@@ -85,7 +85,7 @@ namespace filewatcher_print
             }
             catch
             {
-                Console.Write(filename+"が見当たりません");
+                Console.Write(foldername + "が見当たりません");
             }
             Console.WriteLine("監視を開始"); //コンソールに出力
         }
