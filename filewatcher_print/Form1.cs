@@ -3,6 +3,7 @@
  */
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -26,39 +27,66 @@ namespace filewatcher_print
 
         }
 
-        private System.IO.FileSystemWatcher watcher = null;
+        private FileSystemWatcher watcher = null;
         string filepath;
+        string filename = string.Empty;
 
         private void button1_Click(object sender, EventArgs e)
         {
             if (watcher != null) return;
+            watcher = new FileSystemWatcher();
 
-            watcher = new System.IO.FileSystemWatcher();
-            
+            // StreamReader の新しいインスタンスを生成する
+            StreamReader cReader = (
+                new System.IO.StreamReader(@"fconfig.txt", System.Text.Encoding.Default)
+            );
+
+            //読み込みできる文字がなくなるまで繰り返す
+            while (cReader.Peek() >= 0)
+            {
+                //ファイルを1行ずつ読み込む
+                string stBuffer = cReader.ReadLine();
+                //読み込んだものを追加で格納する
+                filename += stBuffer;
+            }
+
+            //cReaderとじる→オブジェクトの破棄を保証する
+            cReader.Close();
+
             //監視するフォルダを指定
-            watcher.Path = @"C:\Users\1223138\Desktop\filewatch"; //ここ変える
+            //watcher.Path = @"C:\Users\1223138\Desktop\filewatch"; //ここ変える
             //カレントディレクトリを↑と同じにする↓
-            System.IO.Directory.SetCurrentDirectory(@"C:\Users\1223138\Desktop\filewatch"); //ここも変える
+            //Directory.SetCurrentDirectory(@"C:\Users\1223138\Desktop\filewatch"); //ここも変える
+
+            watcher.Path = @filename;
+            Directory.SetCurrentDirectory(@filename);
 
             //最終アクセス、最終更新、ファイル、フォルダ名の変更を監視
             watcher.NotifyFilter =
-                (System.IO.NotifyFilters.LastAccess
-                |System.IO.NotifyFilters.LastWrite
-                |System.IO.NotifyFilters.FileName
-                |System.IO.NotifyFilters.DirectoryName);
+                (NotifyFilters.LastAccess
+                |NotifyFilters.LastWrite
+                |NotifyFilters.FileName
+                |NotifyFilters.DirectoryName);
             //全てのファイルを監視
             watcher.Filter = "";
             //UIのスレッドにマーシャリングする？よくわからんちん
             watcher.SynchronizingObject = this;
 
             //イベントハンドラの追加
-            watcher.Changed += new System.IO.FileSystemEventHandler(watcher_Changed);
-            watcher.Created += new System.IO.FileSystemEventHandler(watcher_Changed);
-            watcher.Deleted += new System.IO.FileSystemEventHandler(watcher_Changed);
-            watcher.Renamed += new System.IO.RenamedEventHandler(watcher_Renamed);
+            watcher.Changed += new FileSystemEventHandler(watcher_Changed);
+            watcher.Created += new FileSystemEventHandler(watcher_Changed);
+            watcher.Deleted += new FileSystemEventHandler(watcher_Changed);
+            watcher.Renamed += new RenamedEventHandler(watcher_Renamed);
 
             //監視を開始する
-            watcher.EnableRaisingEvents = true;
+            try
+            {
+                watcher.EnableRaisingEvents = true;
+            }
+            catch
+            {
+                Console.Write(filename+"が見当たりません");
+            }
             Console.WriteLine("監視を開始"); //コンソールに出力
         }
 
@@ -72,32 +100,32 @@ namespace filewatcher_print
         }
         
         //ファイル監視イベントハンドラ
-        private void watcher_Changed(System.Object source,System.IO.FileSystemEventArgs e)
+        private void watcher_Changed(System.Object source, FileSystemEventArgs e)
         {
 
             filepath = e.FullPath; //フルパスで記憶
 
             switch(e.ChangeType)
             {
-                case System.IO.WatcherChangeTypes.Changed:
+                case WatcherChangeTypes.Changed:
                     Console.WriteLine(
                         "ファイル「" + e.FullPath + "」が変更された");
                     break;
-                case System.IO.WatcherChangeTypes.Created:
+                case WatcherChangeTypes.Created:
                     Console.WriteLine(
                         "ファイル「" + e.FullPath + "」が作成された");
                     Console.WriteLine("印刷するぞい");
                     pd_Print(); //印刷するぞい
 
                     break;
-                case System.IO.WatcherChangeTypes.Deleted:
+                case WatcherChangeTypes.Deleted:
                     Console.WriteLine(
                         "ファイル「" + e.FullPath + "」が削除された");
                     break;
             }
         }
 
-        private void watcher_Renamed(System.Object source,System.IO.RenamedEventArgs e)
+        private void watcher_Renamed(System.Object source,RenamedEventArgs e)
         {
             Console.WriteLine(
                 "ファイル「" + e.FullPath + "」の名前が変更された");
@@ -151,7 +179,7 @@ namespace filewatcher_print
 
         private void pd_PrintPage(object sender,System.Drawing.Printing.PrintPageEventArgs e)
         {
-            string filename = System.IO.Path.GetFileName(filepath); //ファイル名をとりだす
+            string filename = Path.GetFileName(filepath); //ファイル名をとりだす
 
             //画像を読み込む
             Image img = Image.FromFile(filename);
