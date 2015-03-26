@@ -24,12 +24,14 @@ namespace filewatcher_print
 
         private void Form1_Load(object sender, EventArgs e)
         {
-
+            Console.WriteLine("\n通常使うプリンターで印刷します。\n");
         }
 
         private FileSystemWatcher watcher = null;
         string filepath;
         string foldername = string.Empty;
+
+        string[] param;
 
         private void button1_Click(object sender, EventArgs e)
         {
@@ -42,17 +44,20 @@ namespace filewatcher_print
             );
 
             //読み込みできる文字がなくなるまで繰り返す
-            while (cReader.Peek() >= 0)
-            {
-                //ファイルを1行ずつ読み込む
-                string stBuffer = cReader.ReadLine();
-                //読み込んだものを追加で格納する
-                foldername += stBuffer;
-            }
+            //フォルダ指定  
+            //ファイルを1行ずつ読み込む
+            string stBuffer = cReader.ReadLine();
+            //読み込んだものを追加で格納する
+            foldername += stBuffer;
 
+            //2行目を読み込む
+            string printset = cReader.ReadLine();
+            param = printset.Split(',');
+            //Console.WriteLine("印刷設定" + printset);
+               
             //cReaderとじる→オブジェクトの破棄を保証する
             cReader.Close();
-
+            
             //監視するフォルダを指定
             //watcher.Path = @"C:\Users\1223138\Desktop\filewatch"; //ここ変える
             //カレントディレクトリを↑と同じにする↓
@@ -81,6 +86,7 @@ namespace filewatcher_print
             //監視を開始する
             try
             {
+                Console.Write(foldername + "を監視しています\n");
                 watcher.EnableRaisingEvents = true;
             }
             catch
@@ -98,7 +104,7 @@ namespace filewatcher_print
             watcher = null;
             Console.WriteLine("監視を終了");
         }
-        
+
         //ファイル監視イベントハンドラ
         private void watcher_Changed(System.Object source, FileSystemEventArgs e)
         {
@@ -185,7 +191,9 @@ namespace filewatcher_print
             Image img = Image.FromFile(filename);
             //画像を描画
             //e.Graphics.DrawImage(img, e.MarginBounds);
-            e.Graphics.DrawImage(img,580,0,img.Width*0.8f,img.Height*0.8f);
+
+            e.Graphics.DrawImage(img, int.Parse(param[0]), int.Parse(param[1]), img.Width * float.Parse(param[2]), img.Height * float.Parse(param[3]));
+            //e.Graphics.DrawImage(img,580,0,img.Width*0.8f,img.Height*0.8f);
             //次のページがないことを通知する(必要)
             e.HasMorePages = false;
             //後始末をする
