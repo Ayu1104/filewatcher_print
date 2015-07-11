@@ -5,3 +5,4 @@ C:\Users\1223138\Documents\Visual Studio 2010\Projects\filewatcher_print\filewat
 C:\Users\1223138\Documents\Visual Studio 2010\Projects\filewatcher_print\filewatcher_print\obj\x86\Release\filewatcher_print.csproj.GenerateResource.Cache
 C:\Users\1223138\Documents\Visual Studio 2010\Projects\filewatcher_print\filewatcher_print\obj\x86\Release\filewatcher_print.exe
 C:\Users\1223138\Documents\Visual Studio 2010\Projects\filewatcher_print\filewatcher_print\obj\x86\Release\filewatcher_print.pdb
+C:\Users\1223138\Documents\Visual Studio 2010\Projects\filewatcher_print\filewatcher_print\obj\x86\Release\filewatcher_print.csprojResolveAssemblyReference.cache

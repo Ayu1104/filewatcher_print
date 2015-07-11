@@ -1,6 +1,5 @@
 ﻿/*フォルダ監視して自動で印刷してくれる
- * アプリケーションをめざして作ってます
- */
+ * アプリケーションをめざして */
 
 using System;
 using System.IO;
@@ -33,6 +32,9 @@ namespace filewatcher_print
 
         string[] param;
 
+        string printdirectionstr = string.Empty;
+        int printdirection;
+
         private void button1_Click(object sender, EventArgs e)
         {
             if (watcher != null) return;
@@ -46,15 +48,19 @@ namespace filewatcher_print
             //読み込みできる文字がなくなるまで繰り返す
             //フォルダ指定  
             //ファイルを1行ずつ読み込む
-            string stBuffer = cReader.ReadLine();
+            string stBuffer = cReader.ReadLine(); //監視ファイルを取得
             //読み込んだものを追加で格納する
             foldername += stBuffer;
 
             //2行目を読み込む
-            string printset = cReader.ReadLine();
+            string printset = cReader.ReadLine(); //印刷位置を取得
             param = printset.Split(',');
             //Console.WriteLine("印刷設定" + printset);
-               
+
+            //3行目を読み込む
+            printdirectionstr = cReader.ReadLine(); //プリントの向きを取得 0が縦、1が横
+            printdirection = int.Parse(printdirectionstr); //取得した値をintに変換
+
             //cReaderとじる→オブジェクトの破棄を保証する
             cReader.Close();
             
@@ -74,7 +80,7 @@ namespace filewatcher_print
                 |NotifyFilters.DirectoryName);
             //全てのファイルを監視
             watcher.Filter = "";
-            //UIのスレッドにマーシャリングする？よくわからんちん
+            //UIのスレッドにマーシャリングする
             watcher.SynchronizingObject = this;
 
             //イベントハンドラの追加
@@ -120,8 +126,8 @@ namespace filewatcher_print
                 case WatcherChangeTypes.Created:
                     Console.WriteLine(
                         "ファイル「" + e.FullPath + "」が作成された");
-                    Console.WriteLine("印刷するぞい");
-                    pd_Print(); //印刷するぞい
+                    Console.WriteLine("印刷を開始します");
+                    pd_Print();
 
                     break;
                 case WatcherChangeTypes.Deleted:
@@ -143,7 +149,7 @@ namespace filewatcher_print
             using (PrintDocument doc = new PrintDocument())
             {
                 /*
-                               doc.DefaultPageSettings.Landscape = true;
+                 doc.DefaultPageSettings.Landscape = true;
 
                 // プリンタがサポートしている用紙サイズを調べる
                 foreach (PaperSize ps in doc.PrinterSettings.PaperSizes)
@@ -165,7 +171,14 @@ namespace filewatcher_print
                     new System.Drawing.Printing.PrintPageEventHandler(pd_PrintPage);
 
                 // 用紙の向きを設定(横：true、縦：false)
-                pd.DefaultPageSettings.Landscape = true;
+                if (printdirection == 0)
+                {
+                    pd.DefaultPageSettings.Landscape = false;
+                }
+                else
+                {
+                    pd.DefaultPageSettings.Landscape = true;
+                }
 
                 // プリンタがサポートしている用紙サイズを調べる
                 foreach (PaperSize ps in pd.PrinterSettings.PaperSizes)
